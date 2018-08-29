@@ -1,0 +1,13 @@
+{% extends 'menu/layout.html' %}
+{% block body %}
+    {% url 'menu_new' as create_menu %}
+    {% if request.get_full_path == create_menu %}
+        <h1>Create menu</h1>
+    {% else %}
+        <<h1>Edit menu</h1>
+    {% endif %}
+    <form method="POST" class="menu-form">{% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit" class="save btn btn-default">Save</button>
+    </form>
+{% endblock %}
