@@ -1,5 +1,4 @@
 from django import forms
-from django.forms.extras.widgets import SelectDateWidget
 
 from .models import Menu, Item, Ingredient
 
@@ -11,6 +10,8 @@ class MenuForm(forms.ModelForm):
 
 
 class ChangeMenuForm(forms.ModelForm):
+    """form to create and change menu """
+
     class Meta:
         model = Menu
         exclude = ('created_date',)
@@ -24,6 +25,8 @@ class ChangeMenuForm(forms.ModelForm):
 
 
 class ItemEditForm(forms.ModelForm):
+    """form to edit item """
+
     class Meta:
         model = Item
         exclude = ('chef', 'created_date')

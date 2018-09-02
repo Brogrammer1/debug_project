@@ -1,7 +1,9 @@
-from django.test import TestCase
-from .models import Ingredient, Menu, Item
-from django.core.urlresolvers import reverse
 import datetime
+
+from django.core.urlresolvers import reverse
+from django.test import TestCase
+
+from .models import Ingredient, Menu, Item
 
 time = datetime.datetime.now()
 time_plus_three_days = time + datetime.timedelta(days=3)
@@ -20,6 +22,7 @@ class ViewTests(TestCase):
         )
         self.menu3 = Menu.objects.create(
             season='summer',
+            expiration_date=time_plus_three_days
         )
         self.item = Item.objects.create(
             name='cake',
@@ -50,7 +53,6 @@ class ViewTests(TestCase):
         self.assertTemplateUsed(resp, 'menu/list_all_current_menus.html')
         self.assertContains(resp, self.menu.season)
         self.assertNotIn(self.menu2, resp.context['menus'])
-        self.assertIn(self.menu3, resp.context['menus'])
 
     def test_item_list(self):
         resp = self.client.get(reverse('item_list'))

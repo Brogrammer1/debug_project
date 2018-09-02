@@ -1,5 +1,14 @@
+from django.core.exceptions import ValidationError
 from django.db import models
 from django.utils import timezone
+
+TIME_NOW = timezone.now()
+
+
+def valid_expiry_date(date):
+    if date < TIME_NOW:
+        raise ValidationError(
+            "expiration date cannot be today or earlier.")
 
 
 class Menu(models.Model):
@@ -7,8 +16,7 @@ class Menu(models.Model):
     items = models.ManyToManyField('Item', related_name='items')
     created_date = models.DateTimeField(
         default=timezone.now)
-    expiration_date = models.DateTimeField(
-        blank=True, null=True)
+    expiration_date = models.DateTimeField(validators=[valid_expiry_date])
 
     def __str__(self):
         return self.season

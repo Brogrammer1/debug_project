@@ -1,12 +1,15 @@
-from django.shortcuts import render, get_object_or_404, redirect
-from django.http import Http404
 from operator import attrgetter
+
 from django.core.exceptions import ObjectDoesNotExist
-from .models import *
+from django.http import Http404
+from django.shortcuts import render, get_object_or_404, redirect
+
 from .forms import *
+from .models import *
 
 
 def menu_list(request):
+    """displays all the menus on the root url page"""
     all_menus = Menu.objects.prefetch_related('items').all()
     menus = []
     menus2 = []
@@ -25,16 +28,19 @@ def menu_list(request):
 
 
 def item_list(request):
+    """displays a list of all items to items page """
     items = Item.objects.all()
     return render(request, 'menu/item_list.html', {'items': items})
 
 
 def menu_detail(request, pk):
+    """ displays chosen menu in more detail """
     menu = Menu.objects.get(pk=pk)
     return render(request, 'menu/menu_detail.html', {'menu': menu})
 
 
 def item_detail(request, pk):
+    """displays chosen item in more detail"""
     try:
         item = Item.objects.get(pk=pk)
     except ObjectDoesNotExist:
@@ -43,6 +49,7 @@ def item_detail(request, pk):
 
 
 def create_new_menu(request):
+    """ displays form to create a new menu """
     if request.method == "POST":
         form = ChangeMenuForm(request.POST)
         if form.is_valid():
@@ -54,6 +61,7 @@ def create_new_menu(request):
 
 
 def edit_menu(request, pk):
+    """ displays form to edit menu """
     menu = get_object_or_404(Menu, pk=pk)
     if request.method == "POST":
         form = ChangeMenuForm(request.POST, instance=menu)
@@ -67,6 +75,7 @@ def edit_menu(request, pk):
 
 
 def edit_item(request, pk):
+    """ displays form to edit item """
     item = get_object_or_404(Item, pk=pk)
     if request.method == "POST":
         form = ItemEditForm(request.POST, instance=item)
